@@ -31,6 +31,8 @@ class TicTacToe{
 
         void print_board() const;
         void makeMove(const int& position);
+        char winner() const;
+        bool winState() const;
 };
 
 void TicTacToe::print_board() const{
@@ -60,13 +62,44 @@ void TicTacToe::makeMove(const int& position){
         this->moves++;    
     }
 }
+char TicTacToe::winner() const{
+    // Short circuit
+    if (this->moves < 5) return ' ';
+
+    // Checking the rows
+    for (int i = 0; i < 3; i++){
+        if (this->board[i][0] == ' ') continue;
+        if (this->board[i][0] ==  this->board[i][1] && this->board[i][1] ==  this->board[i][2]) return this->board[i][0];
+    }
+    // cout << "Win did not happen via row" << endl;
+
+    // Checking the columns
+    for (int i = 0; i < 3; i++){
+        if (this->board[0][i] == ' ') continue;
+        if (this->board[0][i] ==  this->board[1][i] && this->board[1][i] ==  this->board[2][i]) return this->board[0][i];
+    }
+    // cout << "Win did not happen via column" << endl;
+
+    // Checking the diagonals
+    if (this->board[1][1] != ' '){
+        if (this->board[0][0] == this->board[1][1] && this->board[2][2] == this->board[1][1]) return this->board[1][1];
+        // cout << "Win did not happen via positive diagonal" << endl;
+
+        if (this->board[2][0] == this->board[1][1] && this->board[2][0] == this->board[1][1]) return this->board[1][1];
+        // cout << "Win did not happen via negative diagonal" << endl;    
+    }
+
+    return ' ';
+}
+bool TicTacToe::winState() const{
+    char winningChar = this->winner();
+
+    if (winningChar == ' ') return false;
+    return true;
+}
 
 int main(){
     TicTacToe board;
-    board.print_board();
-    board.makeMove(0);
-    board.makeMove(2);
-    board.print_board();
 
     return 0;
 }
